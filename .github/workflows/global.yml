@@ -1,0 +1,18 @@
+name: GLOBAL
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: TypeScript lint
+        run: echo "Run TypeScript checks here"
+
+      - name: Python lint
+        run: echo "Run Python checks here"
