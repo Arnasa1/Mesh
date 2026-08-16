@@ -5,6 +5,7 @@ Mesh is a collaborative document platform designed around a **local-first archit
 The project focuses on distributed systems concepts such as **CRDTs, offline-first applications, event logs, optimistic updates, WebSockets, and conflict resolution**.
 
 ---
+
 Installation
 Prerequisites
 
@@ -18,7 +19,11 @@ npm
 Docker
 Docker Compose
 
+
+
 Windows
+
+
 
 Install:
 
@@ -41,7 +46,11 @@ npm --version
 docker --version
 docker compose version
 
+
+
 macOS
+
+
 
 Install Homebrew if it is not already installed.
 
@@ -59,7 +68,11 @@ npm --version
 docker --version
 docker compose version
 
+
+
 Linux
+
+
 
 Arch Linux / CachyOS
 
@@ -152,6 +165,9 @@ cd frontend
 npm run dev
 
 The Vite development server will display the local URL in the terminal.
+
+
+
 
 Testing
 Backend
