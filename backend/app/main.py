@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, Response, APIRouter, status, HTTPException
+from fastapi import FastAPI, Request, Depends, Response, APIRouter, status, HTTPException
 from sqlalchemy.orm import Session
 from fastapi.exceptions import RequestValidationError
 from app.database import get_db
@@ -6,7 +6,6 @@ from app.api.document import DocumentCreate
 from app.api.registration import RegistrationRequest, RegistrationResponse
 from app.models.models import Document, User
 import argon2
-from fastapi import Request
 
 app = FastAPI(
     title="Mesh API",
@@ -59,14 +58,6 @@ async def create_document(document: DocumentCreate,
 @app.post("/register/")
 async def registration(username, email, password, registration: RegistrationRequest, db: Session = Depends(get_db)):
 
-    db_users = User(   
-        username = registration.username,
-        email = registration.email,
-        password_hash = registration.password,
-    )
-
-    # Check username
-
     existing_username = (
         db.query(User)
         .filter(User.username == registration.username)
@@ -94,22 +85,23 @@ async def registration(username, email, password, registration: RegistrationRequ
 
     password_hash = ph.hash(registration.password)
 
+    db_users = User(   
+            username = registration.username,
+            email = registration.email,
+            password_hash = password_hash,
+        )
+
     try:
         db.add(db_users)
         db.commit()
         db.refresh(db_users)
     except Exception as e:
         db.rollback()
-        return Response( content = f"Error: {str(e)}", status_code = 400)
+        return Response(content=f"Error: {str(e)}", status_code=400)
 
 
-    db.add(db_users)
-    db.commit()
-    db.refresh(db_users)
-    db.close()
 
     return {
-            "username": registration.username,
-            "email": registration.email,
-            "password": password_hash
+            "id": db_users.id,
+            "email": db_users.email,
             }

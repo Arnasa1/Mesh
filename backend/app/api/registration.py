@@ -35,6 +35,7 @@ class RegistrationResponse(BaseModel):
     id: int
     username: str
     email: EmailStr
+    password: str
 
 # Password validation rules
 # -------------------------
