@@ -18,16 +18,20 @@
 - #### [Python](https://www.python.org/)
 - #### [Node.js](https://nodejs.org/en)
 - #### [Docker Desktop](https://nodejs.org/en)
-- #### Install uv using PowerShell: ```powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex" ```
+- #### Install uv using PowerShell:
+```powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex" ```
 
 ### 2. MacOS installation:
 - #### [Homebrew](https://brew.sh/)
-- #### insall using Homebrew ``` brew update brew install git python node uv brew install --cask docker ```
+- #### insall using Homebrew 
+``` brew update brew install git python node uv brew install --cask docker ```
 
 ### 3. Arch based linux
-- #### bash ```sudo pacman -Syu --needed git curl base-devel python python-pip nodejs npm docker docker-compose```
+- #### bash 
+```sudo pacman -Syu --needed git curl base-devel python python-pip nodejs npm docker docker-compose```
 
-- #### bash ```yay install uv ```
+- #### bash 
+```yay install uv ```
 
 ## Clone the repository and enter the project directory:
 ####git clone cd mesh Backend cd backend
