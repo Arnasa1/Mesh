@@ -2,6 +2,7 @@ from app.database import get_db
 from app.models.models import User
 from pydantic import BaseModel, Field, EmailStr, field_validator
 import argon2
+import re
 
 class RegistrationRequest(BaseModel):
     username: str = Field(..., max_length=255)
@@ -43,13 +44,3 @@ class RegistrationResponse(BaseModel):
 # Have at least one special character ($, @, #, %)
 # Be between 12 and 20 characters in length
 # -------------------------
-
-
-ph = argon2.PasswordHasher()
-
-def login(db, user, password):
-    hash = db.get_password_hash_for_user(user)
-
-    ph.verify(hash, password)
-    if ph.check_needs_rehash(hash):
-        db.set_password_hash_for_user(user, ph.hash(password))
