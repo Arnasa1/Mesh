@@ -12,7 +12,7 @@
 - ### WebSockets
 - ### Automatic synchronization between devices
 
-##**Installation Prerequisites**:
+## **Installation Prerequisites**:
 ### 1. Windows installation:
 - #### [Git](https://git-scm.com/)
 - #### [Python](https://www.python.org/)
