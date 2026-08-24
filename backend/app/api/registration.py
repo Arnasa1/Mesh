@@ -44,11 +44,6 @@ class RegistrationResponse(BaseModel):
 # Be between 12 and 20 characters in length
 # -------------------------
 
-#reg = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_–+={}[:;<>,.?/~])[A-Za-z\d@$#%]{12,20}$"
-
-#pat = re.compile(reg)
-
-#mat = re.search(pat, RegistrationRequest.password)
 
 ph = argon2.PasswordHasher()
 
