@@ -47,6 +47,6 @@ class Document(Base):
         default=datetime.utcnow,
         nullable=False,
     )
-    user_id: Mapped[int] = mapped_column(
-        foreign_key="users.id",
-        nullable=False,)
+    #user_id: Mapped[int] = mapped_column(
+        #foreign_key="users.id",
+        #nullable=False,)
