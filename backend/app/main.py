@@ -58,14 +58,6 @@ async def create_document(document: DocumentCreate,
 @app.post("/register/")
 async def registration(username, email, password, registration: RegistrationRequest, db: Session = Depends(get_db)):
 
-  #  db_users = User(   
-    #    username = registration.username,
-   #     email = registration.email,
-   #     password_hash = registration.password,
-   # )
-
-    # Check username
-
     existing_username = (
         db.query(User)
         .filter(User.username == registration.username)
