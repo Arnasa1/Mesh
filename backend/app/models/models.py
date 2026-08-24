@@ -29,3 +29,24 @@ class User(Base):
         default=datetime.utcnow,
         nullable=False,
     )
+class Document(Base):
+    __tablename__ = "documents"
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    title: Mapped[str] = mapped_column(
+        String(255),
+        nullable=False,
+    )
+
+    content: Mapped[str] = mapped_column(
+        String,
+        nullable=False,
+    )
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        default=datetime.utcnow,
+        nullable=False,
+    )
+    #user_id: Mapped[int] = mapped_column(
+        #foreign_key="users.id",
+        #nullable=False,)
