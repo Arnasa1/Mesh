@@ -105,7 +105,6 @@ async def registration(username, email, password, registration: RegistrationRequ
     return {
             "id": db_users.id,
             "email": db_users.email,
-            "hash": db_users.password_hash
             }
 
 @app.post("/login/")
