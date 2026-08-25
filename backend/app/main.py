@@ -139,7 +139,7 @@ async def login(login: LoginRequest, db: Session = Depends(get_db)):
                     "token_type": "bearer"
               }
     except Exception as e:
-            return Response(content=f"Invalid credencials", status_code=401)
+            return Response(content=f"Invalid credentials", status_code=401)
 
 
     
