@@ -120,7 +120,7 @@ async def login(login: LoginRequest, db: Session = Depends(get_db)):
         )
     if not existing_user : 
             raise HTTPException(
-            detail = "Invalid credencials", status_code=401
+            detail = "Invalid credentials", status_code=401
         )
 
     # Check hashed password
