@@ -1,7 +1,6 @@
 from app.database import get_db
 from app.models.models import User
 from pydantic import BaseModel, Field, EmailStr, field_validator
-import argon2
 import re
 
 class RegistrationRequest(BaseModel):

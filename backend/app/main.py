@@ -6,6 +6,8 @@ from app.database import get_db
 from app.api.document import DocumentCreate
 from app.api.auth import RegistrationRequest, RegistrationResponse, LoginRequest
 from app.models.models import Document, User
+from app.api.jwt import create_jwt_token, SECRET_KEY
+import jwt
 import argon2
 
 app = FastAPI(
@@ -57,7 +59,7 @@ async def create_document(document: DocumentCreate,
     }
 
 @app.post("/register/", status_code = status.HTTP_201_CREATED)
-async def registration(username, email, password, registration: RegistrationRequest, db: Session = Depends(get_db)):
+async def registration(registration: RegistrationRequest, db: Session = Depends(get_db)):
 
     # Check username
 
@@ -109,8 +111,8 @@ async def registration(username, email, password, registration: RegistrationRequ
             }
 
 @app.post("/login/")
-async def login(user, password, login: LoginRequest, db: Session = Depends(get_db)):
-    
+async def login(login: LoginRequest, db: Session = Depends(get_db)):
+
     # Check db for existing username/email
 
     existing_user = (
@@ -122,6 +124,10 @@ async def login(user, password, login: LoginRequest, db: Session = Depends(get_d
             raise HTTPException(
             detail = "Invalid credencials", status_code=401
         )
+    
+    # Creating jwt token
+    payload = create_jwt_token(db)
+    token = jwt.encode({'data': payload}, SECRET_KEY, algorithm="HS256")
 
     # Check hashed password
 
@@ -129,6 +135,11 @@ async def login(user, password, login: LoginRequest, db: Session = Depends(get_d
         ph.verify(existing_user.password_hash, login.password)
         return{
                     "status": "Login successful", 
+                    "access_token": token,
+                    "token_type": "bearer"
               }
     except Exception as e:
             return Response(content=f"Invalid credencials", status_code=401)
+
+
+    
