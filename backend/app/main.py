@@ -109,7 +109,7 @@ async def registration(registration: RegistrationRequest, db: Session = Depends(
             }
 
 @app.post("/login/")
-async def login(user, password, login: LoginRequest, db: Session = Depends(get_db)):
+async def login(login: LoginRequest, db: Session = Depends(get_db)):
     
     # Check db for existing username/email
 
