@@ -57,7 +57,7 @@ async def create_document(document: DocumentCreate,
     }
 
 @app.post("/register/", status_code = status.HTTP_201_CREATED)
-async def registration(username, email, password, registration: RegistrationRequest, db: Session = Depends(get_db)):
+async def registration(registration: RegistrationRequest, db: Session = Depends(get_db)):
 
     # Check username
 
