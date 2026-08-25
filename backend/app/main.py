@@ -6,6 +6,8 @@ from app.database import get_db
 from app.api.document import DocumentCreate
 from app.api.auth import RegistrationRequest, RegistrationResponse, LoginRequest
 from app.models.models import Document, User
+from app.api.jwt import create_jwt_token, SECRET_KEY
+import jwt
 import argon2
 
 app = FastAPI(
@@ -122,6 +124,10 @@ async def login(login: LoginRequest, db: Session = Depends(get_db)):
             raise HTTPException(
             detail = "Invalid credentials", status_code=401
         )
+    
+    # Creating jwt token
+    token =create_jwt_token(user_id=existing_user.id, username=existing_user.username, expires_in_minutes=30)
+   
 
     # Check hashed password
 
@@ -129,6 +135,11 @@ async def login(login: LoginRequest, db: Session = Depends(get_db)):
         ph.verify(existing_user.password_hash, login.password)
         return{
                     "status": "Login successful", 
+                    "access_token": token,
+                    "token_type": "bearer"
               }
     except Exception as e:
-            return Response(content=f"Invalid credencials", status_code=401)
+            return Response(content=f"Invalid credentials", status_code=401)
+
+
+    
