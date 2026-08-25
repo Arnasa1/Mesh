@@ -126,8 +126,8 @@ async def login(login: LoginRequest, db: Session = Depends(get_db)):
         )
     
     # Creating jwt token
-    payload = create_jwt_token(db)
-    token = jwt.encode({'data': payload}, SECRET_KEY, algorithm="HS256")
+    token =create_jwt_token(user_id=existing_user.id, username=existing_user.username, expires_in_minutes=30)
+   
 
     # Check hashed password
 
