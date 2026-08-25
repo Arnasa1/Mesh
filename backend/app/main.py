@@ -18,7 +18,7 @@ async def validation_exception_handler(
     exc: RequestValidationError,
 ):
     return Response(
-        content=f"Validation error: {exc}", status_code=400
+        content=f"Validation error: {exc}", status_code=422
     )
 
 router = APIRouter()
@@ -50,13 +50,13 @@ async def create_document(document: DocumentCreate,
     except Exception as e:
         db.rollback()
         return Response(
-            content=f"Error creating document: {str(e)}", status_code=400)
+            content=f"Bad request: {str(e)}", status_code=400)
     return {
         "title": document.title,
         "content": document.content,
     }
 
-@app.post("/register/")
+@app.post("/register/", status_code = status.HTTP_201_CREATED)
 async def registration(username, email, password, registration: RegistrationRequest, db: Session = Depends(get_db)):
 
     # Check username
@@ -100,9 +100,10 @@ async def registration(username, email, password, registration: RegistrationRequ
         db.refresh(db_users)
     except Exception as e:
         db.rollback()
-        return Response(content=f"Error: 400", status_code=400)
+        return Response(content=f"Unprocessable entity", status_code=422)
 
     return {
+            "status": "Registration successful",
             "id": db_users.id,
             "email": db_users.email,
             }
@@ -127,7 +128,7 @@ async def login(user, password, login: LoginRequest, db: Session = Depends(get_d
     try:
         ph.verify(existing_user.password_hash, login.password)
         return{
-                    "status": "login successful", 
+                    "status": "Login successful", 
               }
     except Exception as e:
             return Response(content=f"Invalid credencials", status_code=401)
