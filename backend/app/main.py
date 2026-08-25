@@ -112,7 +112,7 @@ async def registration(registration: RegistrationRequest, db: Session = Depends(
 
 @app.post("/login/")
 async def login(login: LoginRequest, db: Session = Depends(get_db)):
-
+    
     # Check db for existing username/email
 
     existing_user = (
@@ -122,7 +122,7 @@ async def login(login: LoginRequest, db: Session = Depends(get_db)):
         )
     if not existing_user : 
             raise HTTPException(
-            detail = "Invalid credencials", status_code=401
+            detail = "Invalid credentials", status_code=401
         )
     
     # Creating jwt token
