@@ -47,7 +47,7 @@ npm install
 
 #### 1. Install core dependecies:
 ```bash
-powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+winget install --id Git.Git -e; winget install --id Python.Python.3.14 -e; winget install --id OpenJS.NodeJS -e; winget install --id Docker.DockerDesktop -e; winget install --id astral-sh.uv -e
  ```
   #### 2. Setup:
 ``` bash
