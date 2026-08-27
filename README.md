@@ -12,33 +12,148 @@
 - ### WebSockets
 - ### Automatic synchronization between devices
 
-## **Installation Prerequisites**:
-### 1. Windows installation:
+## **Development setup**:
+### Windows
+<details>
+<summary>Windows Installation (For less experienced users)</summary>
+
+#### 1. Install core dependecies:
 - #### [Git](https://git-scm.com/)
 - #### [Python](https://www.python.org/)
 - #### [Node.js](https://nodejs.org/en)
 - #### [Docker Desktop](https://nodejs.org/en)
 - #### Install uv using PowerShell:
-```powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex" ```
+```bash
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+ ```
+  #### 2. Setup:
+``` bash
+git clone https://github.com/Arnasa1/Mesh.git
+```
+#### Backend
+``` bash
+cd Mesh
+cd backend
+uv sync
+```
+#### Frontend
+``` bash
+cd ../frontend
+npm install
+```
+</details>
 
-### 2. MacOS installation:
+<details>
+<summary>Winget (Reccomended)</summary>
+
+#### 1. Install core dependecies:
+```bash
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+ ```
+  #### 2. Setup:
+``` bash
+git clone https://github.com/Arnasa1/Mesh.git
+```
+#### Backend
+``` bash
+cd Mesh
+cd backend
+uv sync
+```
+#### Frontend
+``` bash
+cd ../frontend
+npm install
+```
+</details>
+
+### MacOS
+<details>
+<summary>Homebrew</summary>
+
+#### 1. Install core dependecies
 - #### [Homebrew](https://brew.sh/)
 - #### insall using Homebrew 
-``` brew update brew install git python node uv brew install --cask docker ```
+``` bash 
+brew update brew install git python node uv brew install --cask docker 
+ ```
+  #### 2. Setup:
+``` bash
+git clone https://github.com/Arnasa1/Mesh.git
+```
+#### Backend
+``` bash
+cd Mesh
+cd backend
+uv sync
+```
+#### Frontend
+``` bash
+cd ../frontend
+npm install
+```
+</details>
 
-### 3. Arch based linux
+### Linux
+<details>
+<summary>Arch based installation</summary>
+
+#### 1. Install core dependecies:
 - #### bash 
-```sudo pacman -Syu --needed git curl base-devel python python-pip nodejs npm docker docker-compose```
+``` bash
+sudo pacman -Syu --needed git curl base-devel python python-pip nodejs npm docker docker-compose uv
+```
+#### 2. Setup:
+``` bash
+git clone https://github.com/Arnasa1/Mesh.git
+```
+#### Backend
+``` bash
+cd Mesh
+cd backend
+uv sync
+```
+#### Frontend
+``` bash
+cd ../frontend
+npm install
+```
 
-- #### bash 
-```yay install uv ```
+</details>
 
-## Clone the repository and enter the project directory:
+<details>
+<summary> NixOS installation </summary>
+
+#### 1. Install core dependecies in /etc/nixos/configuration.nix
+``` bash
+  environment.systemPackages = with pkgs; [
+    git
+    uv
+    python314
+  ];
+```
+#### 2. Setup:
+``` bash
+git clone https://github.com/Arnasa1/Mesh.git
+```
+#### Backend
+``` bash
+cd Mesh
+nix develop
+cd backend
+uv sync
+```
+#### Frontend
+``` bash
+cd ../frontend
+npm install
+```
+</details>
+
+
+
+## Repository configuration (some these changes are configurated in 'Development setup' section):
 #### git clone cd mesh Backend cd backend
-
-#### uv python install 3.13 uv python pin 3.13 uv sync
-
-### If dependencies have not been configured yet:
 
 #### uv add fastapi "uvicorn[standard]" pydantic sqlalchemy alembic asyncpg redis uv add --dev pytest pytest-asyncio httpx Frontend cd ../frontend npm install Start the Infrastructure
 
