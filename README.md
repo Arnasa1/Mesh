@@ -122,7 +122,7 @@ npm install
 </details>
 
 <details>
-<summary> NixOS installation </summary>
+<summary>NixOS installation </summary>
 
 #### 1. Install core dependecies in /etc/nixos/configuration.nix
 ``` bash
