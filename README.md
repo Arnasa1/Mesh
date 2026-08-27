@@ -32,8 +32,7 @@ git clone https://github.com/Arnasa1/Mesh.git
 ```
 #### Backend
 ``` bash
-cd Mesh
-cd backend
+cd Mesh/backend
 uv sync
 ```
 #### Frontend
@@ -56,8 +55,7 @@ git clone https://github.com/Arnasa1/Mesh.git
 ```
 #### Backend
 ``` bash
-cd Mesh
-cd backend
+cd Mesh/backend
 uv sync
 ```
 #### Frontend
@@ -83,8 +81,7 @@ git clone https://github.com/Arnasa1/Mesh.git
 ```
 #### Backend
 ``` bash
-cd Mesh
-cd backend
+cd Mesh/backend
 uv sync
 ```
 #### Frontend
@@ -109,8 +106,7 @@ git clone https://github.com/Arnasa1/Mesh.git
 ```
 #### Backend
 ``` bash
-cd Mesh
-cd backend
+cd Mesh/backend
 uv sync
 ```
 #### Frontend
