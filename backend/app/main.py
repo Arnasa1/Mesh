@@ -1,4 +1,6 @@
 from fastapi import FastAPI, Request, Depends, Response, APIRouter, status, HTTPException
+from fastapi.responses import JSONResponse
+from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 from fastapi.exceptions import RequestValidationError
@@ -26,6 +28,7 @@ async def validation_exception_handler(
 router = APIRouter()
 
 ph = argon2.PasswordHasher()
+
 
 @router.post(
         "/register/",
@@ -78,7 +81,7 @@ async def registration(registration: RegistrationRequest, db: Session = Depends(
 
     existing_email = (
         db.query(User)
-        .filter(User.username == registration.username)
+        .filter(User.email == registration.email)
         .first()
     )
 
@@ -125,21 +128,61 @@ async def login(login: LoginRequest, db: Session = Depends(get_db)):
             detail = "Invalid credentials", status_code=401
         )
     
-    # Creating jwt token
-    token =create_jwt_token(user_id=existing_user.id, username=existing_user.username, expires_in_minutes=30)
-   
 
     # Check hashed password
-
     try:
         ph.verify(existing_user.password_hash, login.password)
-        return{
-                    "status": "Login successful", 
-                    "access_token": token,
-                    "token_type": "bearer"
-              }
     except Exception as e:
             return Response(content=f"Invalid credentials", status_code=401)
 
+    # Creating jwt token
+    token = create_jwt_token(user_id=existing_user.id, username=existing_user.username, expires_in_minutes=30)
 
-    
+    response = JSONResponse(
+        content={
+            "status": "Login successful"
+        }
+    )
+
+    response.set_cookie(
+        key="access_token",
+        value=token,
+        httponly=True,       # JS can't read it — mitigates XSS token theft
+        secure=False,         # only sent over HTTPS (set False for local http dev)
+        samesite="lax",      # or "strict"/"none" depending on your CORS setup
+        max_age=30 * 60,     # match your JWT expiry, in seconds
+        path="/",
+    )
+
+    return response
+
+def get_current_user(request: Request, db: Session = Depends(get_db)) -> User:
+    token = request.cookies.get("access_token")
+    if not token:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+    user = db.query(User).filter(User.id == payload["user_id"]).first()
+    if not user:
+        raise HTTPException(status_code=401, detail="User not found")
+    return user
+
+@app.get("/me")
+async def read_current_user(user: User = Depends(get_current_user)):
+     return{
+          "id": user.id,
+          "username": user.username
+     }
+
+@app.post("/logout")
+async def logout(response: Response):
+    response.delete_cookie("access_token", path="/")
+    return{
+          "status": "Logged out"
+     }

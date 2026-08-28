@@ -1,13 +1,9 @@
 import jwt
-
-from app.database import get_db
-from app.main import Session, Depends
-from app.api.auth import LoginRequest
-from app.models.models import User
 import datetime
 import os
 
-SECRET_KEY = os.urandom(32)
+SECRET_KEY = "5wEmTdg0XoMU4LDgZ0h7AHCehMIzmZlrTq-8nc6mfaw"
+#temp
 
 def create_jwt_token(user_id: int, username: str, expires_in_minutes: int):
     now = datetime.datetime.now(datetime.timezone.utc)
@@ -15,8 +11,7 @@ def create_jwt_token(user_id: int, username: str, expires_in_minutes: int):
         'user_id': user_id,
         'username':username,
         'exp': now + datetime.timedelta(minutes=expires_in_minutes),
-        'iat': now.isoformat(),
+        'iat': now,
         'sub': 'Login request'
     }
     return jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-    
