@@ -31,8 +31,17 @@ async def validation_exception_handler(
     request: Request,
     exc: RequestValidationError,
 ):
+    error = exc.errors()[0]
+
+    field = error["loc"][-1]
+
+    messages = {
+        "email": "Invalid email address.",
+        "password": "Invalid password.",
+    }
+
     return JSONResponse(
-        content={"message": f"Validation error: {exc}"},
+        content={"message": messages.get(field, error["msg"])},
         status_code=422,
     )
 
@@ -107,12 +116,13 @@ async def login(login: LoginRequest, db: Session = Depends(get_db)):
     # Check db for existing username/email
     existing_user = (
         db.query(User)
-        .filter(or_(User.username == login.user, User.email == login.user))
+        .filter(or_(User.username == login.username, User.email == login.username))
         .first()
     )
     if not existing_user:
-        raise HTTPException(
-            detail="Invalid credentials", status_code=401
+        return JSONResponse(
+            content={"message": "Invalid credentials"},
+            status_code=401,
         )
 
     # Check hashed password
@@ -148,18 +158,30 @@ async def login(login: LoginRequest, db: Session = Depends(get_db)):
 async def get_current_user(request: Request, db: Session = Depends(get_db)) -> User:
     token = request.cookies.get("access_token")
     if not token:
-        raise HTTPException(status_code=401, detail="Not authenticated")
+        return JSONResponse(
+            content={"message": "Not authenticated"},
+            status_code=401,
+        )
 
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
     except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Token expired")
+        return JSONResponse(
+                    content={"message": "Token expired"},
+                    status_code=401,
+                )
     except jwt.InvalidTokenError:
-        raise HTTPException(status_code=401, detail="Invalid token")
+        return JSONResponse(
+                    content={"message": "Invalid token"},
+                    status_code=401,
+                )
 
     user = db.query(User).filter(User.id == payload["user_id"]).first()
     if not user:
-        raise HTTPException(status_code=401, detail="User not found")
+        return JSONResponse(
+                    content={"message": "User not found"},
+                    status_code=401,
+                )
     return user
 
 @app.get("/me")
