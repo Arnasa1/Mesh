@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request, Depends, Response, APIRouter, status, HTTPException
 from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
@@ -16,13 +17,23 @@ app = FastAPI(
     title="Mesh API",
     version="0.0.0",
 )
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # Vite default; adjust if different
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(
     request: Request,
     exc: RequestValidationError,
 ):
-    return Response(
-        content=f"Validation error: {exc}", status_code=422
+    return JSONResponse(
+        content={"message": f"Validation error: {exc}"},
+        status_code=422,
     )
 
 router = APIRouter()
@@ -34,88 +45,91 @@ async def root():
     return RedirectResponse(url="/home")
 
 @app.get("/home")
-async def root():
+async def home():
     return {"message": "Mesh API is running"}
 
-@app.post("/register", status_code = status.HTTP_201_CREATED)
+@app.post("/register", status_code=status.HTTP_201_CREATED)
 async def registration(registration: RegistrationRequest, db: Session = Depends(get_db)):
-
-    # Check username
-
+    
     existing_username = (
         db.query(User)
         .filter(User.username == registration.username)
         .first()
     )
-    if existing_username : 
-        raise HTTPException(
-            status_code = status.HTTP_409_CONFLICT,
-            detail = "Username already exists"
+    if existing_username:
+        return JSONResponse(
+            status_code=status.HTTP_409_CONFLICT,
+            content={"message": "Username already exists"},
         )
 
     # Check email
-
     existing_email = (
         db.query(User)
         .filter(User.email == registration.email)
         .first()
     )
-
-    if existing_email : 
-            raise HTTPException(
-                status_code = status.HTTP_409_CONFLICT,
-                detail = "Email already exists"
-            )
+    if existing_email:
+        return JSONResponse(
+            status_code=status.HTTP_409_CONFLICT,
+            content={"message": "Email already exists"},
+        )
 
     password_hash = ph.hash(registration.password)
 
-    db_users = User(   
-            username = registration.username,
-            email = registration.email,
-            password_hash = password_hash,
-        )
+    db_user = User(
+        username=registration.username,
+        email=registration.email,
+        password_hash=password_hash,
+    )
 
     try:
-        db.add(db_users)
+        db.add(db_user)
         db.commit()
-        db.refresh(db_users)
+        db.refresh(db_user)
     except Exception as e:
         db.rollback()
-        return Response(content=f"Unprocessable entity", status_code=422)
+        return JSONResponse(
+            content={"message": "Unprocessable entity"},
+            status_code=422,
+        )
 
-    return {
-            "status": "Registration successful",
-            "email": db_users.email,
-            }
+    return JSONResponse(
+        status_code=status.HTTP_201_CREATED,
+        content={
+            "message": "Registration successful",
+            "email": db_user.email,
+        },
+    )
 
 @app.post("/login")
 async def login(login: LoginRequest, db: Session = Depends(get_db)):
-    
-    # Check db for existing username/email
 
+    # Check db for existing username/email
     existing_user = (
-            db.query(User)
-            .filter(or_(User.username == login.user, User.email == login.user))
-            .first()
+        db.query(User)
+        .filter(or_(User.username == login.user, User.email == login.user))
+        .first()
+    )
+    if not existing_user:
+        raise HTTPException(
+            detail="Invalid credentials", status_code=401
         )
-    if not existing_user : 
-            raise HTTPException(
-            detail = "Invalid credentials", status_code=401
-        )
-    
 
     # Check hashed password
     try:
         ph.verify(existing_user.password_hash, login.password)
     except Exception as e:
-            return Response(content=f"Invalid credentials", status_code=401)
+        return JSONResponse(
+            content={"message": "Invalid credentials"},
+            status_code=401,
+        )
 
     # Creating jwt token
     token = create_jwt_token(user_id=existing_user.id, username=existing_user.username, expires_in_minutes=30)
 
     response = JSONResponse(
         content={
-            "status": "Login successful",
+            "message": "Login successful",
         }
     )
 
@@ -150,12 +164,13 @@ async def get_current_user(request: Request, db: Session = Depends(get_db)) -> U
 
 @app.get("/me")
 async def read_current_user(user: User = Depends(get_current_user)):
-     return{
-          "username": user.username,
-     }
+    return {
+        "username": user.username,
+    }
 
 @app.post("/documents/")
-async def create_document(document: DocumentCreate,
+async def create_document(
+    document: DocumentCreate,
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
@@ -169,8 +184,10 @@ async def create_document(document: DocumentCreate,
         db.refresh(db_document)
     except Exception as e:
         db.rollback()
-        return Response(
-            content=f"Bad request: {str(e)}", status_code=400)
+        return JSONResponse(
+            content={"message": f"Bad request: {str(e)}"},
+            status_code=400,
+        )
     return {
         "title": document.title,
         "content": document.content,
@@ -179,6 +196,6 @@ async def create_document(document: DocumentCreate,
 @app.post("/logout")
 async def logout(response: Response):
     response.delete_cookie("access_token", path="/")
-    return{
-          "status": "Logged out"
-     }
+    return {
+        "message": "Logged out",
+    }
