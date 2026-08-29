@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request, Depends, Response, APIRouter, status, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
@@ -28,6 +28,10 @@ async def validation_exception_handler(
 router = APIRouter()
 
 ph = argon2.PasswordHasher()
+
+@app.get("/")
+async def root():
+    return RedirectResponse(url="/home")
 
 @app.get("/home")
 async def root():
