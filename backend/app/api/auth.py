@@ -9,7 +9,7 @@ class RegistrationRequest(BaseModel):
     password: str = Field(min_length=12, max_length=20)
     @field_validator("password")
     @classmethod
-    def validate_password(cls, password: str) -> str:
+    async def validate_password(cls, password: str) -> str:
         if not re.search(r"[a-z]", password):
             raise ValueError("Password must contain a lowercase letter")
 

@@ -29,39 +29,11 @@ router = APIRouter()
 
 ph = argon2.PasswordHasher()
 
-
-@router.post(
-        "/register/",
-        response_model = RegistrationResponse,
-        status_code = status.HTTP_201_CREATED
-)
-
-@app.get("/")
+@app.get("/home")
 async def root():
     return {"message": "Mesh API is running"}
 
-@app.post("/documents/")
-async def create_document(document: DocumentCreate,
-    db: Session = Depends(get_db),
-):
-    db_document = Document(
-        title=document.title,
-        content=document.content,
-    )
-    try:
-        db.add(db_document)
-        db.commit()
-        db.refresh(db_document)
-    except Exception as e:
-        db.rollback()
-        return Response(
-            content=f"Bad request: {str(e)}", status_code=400)
-    return {
-        "title": document.title,
-        "content": document.content,
-    }
-
-@app.post("/register/", status_code = status.HTTP_201_CREATED)
+@app.post("/register", status_code = status.HTTP_201_CREATED)
 async def registration(registration: RegistrationRequest, db: Session = Depends(get_db)):
 
     # Check username
@@ -109,11 +81,10 @@ async def registration(registration: RegistrationRequest, db: Session = Depends(
 
     return {
             "status": "Registration successful",
-            "id": db_users.id,
             "email": db_users.email,
             }
 
-@app.post("/login/")
+@app.post("/login")
 async def login(login: LoginRequest, db: Session = Depends(get_db)):
     
     # Check db for existing username/email
@@ -140,7 +111,7 @@ async def login(login: LoginRequest, db: Session = Depends(get_db)):
 
     response = JSONResponse(
         content={
-            "status": "Login successful"
+            "status": "Login successful",
         }
     )
 
@@ -148,7 +119,7 @@ async def login(login: LoginRequest, db: Session = Depends(get_db)):
         key="access_token",
         value=token,
         httponly=True,       # JS can't read it — mitigates XSS token theft
-        secure=False,         # only sent over HTTPS (set False for local http dev)
+        secure=True,         # only sent over HTTPS (set False for local http dev)
         samesite="lax",      # or "strict"/"none" depending on your CORS setup
         max_age=30 * 60,     # match your JWT expiry, in seconds
         path="/",
@@ -156,7 +127,7 @@ async def login(login: LoginRequest, db: Session = Depends(get_db)):
 
     return response
 
-def get_current_user(request: Request, db: Session = Depends(get_db)) -> User:
+async def get_current_user(request: Request, db: Session = Depends(get_db)) -> User:
     token = request.cookies.get("access_token")
     if not token:
         raise HTTPException(status_code=401, detail="Not authenticated")
@@ -176,9 +147,30 @@ def get_current_user(request: Request, db: Session = Depends(get_db)) -> User:
 @app.get("/me")
 async def read_current_user(user: User = Depends(get_current_user)):
      return{
-          "id": user.id,
-          "username": user.username
+          "username": user.username,
      }
+
+@app.post("/documents/")
+async def create_document(document: DocumentCreate,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    db_document = Document(
+        title=document.title,
+        content=document.content,
+    )
+    try:
+        db.add(db_document)
+        db.commit()
+        db.refresh(db_document)
+    except Exception as e:
+        db.rollback()
+        return Response(
+            content=f"Bad request: {str(e)}", status_code=400)
+    return {
+        "title": document.title,
+        "content": document.content,
+    }
 
 @app.post("/logout")
 async def logout(response: Response):
