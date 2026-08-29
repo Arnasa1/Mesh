@@ -37,9 +37,12 @@ class RegistrationResponse(BaseModel):
     password: str
 
 class LoginRequest(BaseModel):
+    username: str = Field(..., max_length=255)
+    password: str = Field(min_length=12, max_length=20)
+
+class LoginResponse(BaseModel):
     username: str
     password: str
-
 # Password validation rules
 # -------------------------
 # Have at least one number

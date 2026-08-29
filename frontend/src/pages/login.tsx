@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import "../styles/login.css"
 
-interface LoginRequest {
+interface LoginResponse {
   message: string
 }
 
@@ -32,7 +32,7 @@ function Login() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       })
-      const data: LoginRequest = await res.json()
+      const data: LoginResponse = await res.json()
 
       if (!res.ok) {
         setMessageType('error')
