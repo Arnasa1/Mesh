@@ -1,7 +1,7 @@
 .login {
   min-height: 100vh;
   display: flex;
-  align-items: top;
+  align-items: flex-start;
   justify-content: center;
   background: #0f0f12;
   color: #f5f5f7;
