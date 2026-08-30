@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import "../styles/register.css"
 
 interface RegisterResponse {
@@ -12,6 +12,7 @@ function Register() {
     email: '',
     password: '',
   })
+  const navigate = useNavigate();
   const [message, setMessage] = useState<string>('')
   const [messageType, setMessageType] = useState<'success' | 'error' | ''>('')
   const [loading, setLoading] = useState(false)
@@ -42,6 +43,10 @@ function Register() {
 
       setMessage(data.message || 'Registered successfully!')
       setMessageType('success')
+      setTimeout(() => {
+        navigate("/login")
+      }, 1000);
+
     } catch (err) {
       setMessage(err instanceof Error ? err.message : 'Something went wrong')
     } finally {
