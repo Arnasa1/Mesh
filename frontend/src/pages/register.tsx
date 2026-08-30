@@ -49,6 +49,7 @@ function Register() {
 
     } catch (err) {
       setMessage(err instanceof Error ? err.message : 'Something went wrong')
+      setMessageType('error')
     } finally {
       setLoading(false)
     }
