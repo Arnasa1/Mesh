@@ -1,18 +1,16 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import "../styles/register.css"
+import { Link } from 'react-router-dom'
+import "../styles/login.css"
 
-interface RegisterResponse {
+interface LoginResponse {
   message: string
 }
 
-function Register() {
+function Login() {
   const [formData, setFormData] = useState({
     username: '',
-    email: '',
     password: '',
   })
-  const navigate = useNavigate();
   const [message, setMessage] = useState<string>('')
   const [messageType, setMessageType] = useState<'success' | 'error' | ''>('')
   const [loading, setLoading] = useState(false)
@@ -29,24 +27,20 @@ function Register() {
     setMessageType('')
 
     try {
-      const res = await fetch('/register', {
+      const res = await fetch('/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       })
-      const data: RegisterResponse = await res.json()
+      const data: LoginResponse = await res.json()
 
       if (!res.ok) {
         setMessageType('error')
-        throw new Error(data.message || 'Registration failed')
+        throw new Error(data.message || 'Login failed')
       }
 
-      setMessage(data.message || 'Registered successfully!')
+      setMessage(data.message || 'Logged in successfully!')
       setMessageType('success')
-      setTimeout(() => {
-        navigate("/login")
-      }, 1000);
-
     } catch (err) {
       setMessage(err instanceof Error ? err.message : 'Something went wrong')
       setMessageType('error')
@@ -56,33 +50,18 @@ function Register() {
   }
 
   return (
-    <div className="register">
+    <div className="login">
       <section className="hero">
-        <h1 className="hero-title">Register</h1>
-        <p className="hero-subtitle">
-          Create an account to start using Mesh.
-        </p>
+        <h1 className="hero-title">Login</h1>
 
         <form onSubmit={handleSubmit}>
           <fieldset className="form-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username">Username/Email</label>
             <input
               type="text"
               id="username"
               name="username"
               value={formData.username}
-              onChange={handleChange}
-              required
-            />
-          </fieldset>
-
-          <fieldset className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
               onChange={handleChange}
               required
             />
@@ -103,16 +82,16 @@ function Register() {
           {message && (<p className={`form-message ${messageType}`}>{message}</p>)}
 
           <button type="submit" className="btn btn-primary" disabled={loading}>
-            {loading ? 'Registering...' : 'Register'}
+            {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
 
         <p className="hero-subtitle">
-          Already have an account? <Link to="/login">Log in</Link>
+          Don't have an account? <Link to="/register">Sign up</Link>
         </p>
       </section>
     </div>
   )
 }
 
-export default Register
+export default Login

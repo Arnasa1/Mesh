@@ -31,8 +31,17 @@ async def validation_exception_handler(
     request: Request,
     exc: RequestValidationError,
 ):
+    error = exc.errors()[0]
+
+    field = error["loc"][-1]
+
+    messages = {
+        "email": "Invalid email address.",
+        "password": "Invalid password.",
+    }
+
     return JSONResponse(
-        content={"message": f"Validation error: {exc}"},
+        content={"message": messages.get(field, error["msg"])},
         status_code=422,
     )
 
@@ -107,12 +116,13 @@ async def login(login: LoginRequest, db: Session = Depends(get_db)):
     # Check db for existing username/email
     existing_user = (
         db.query(User)
-        .filter(or_(User.username == login.user, User.email == login.user))
+        .filter(or_(User.username == login.username, User.email == login.username))
         .first()
     )
     if not existing_user:
-        raise HTTPException(
-            detail="Invalid credentials", status_code=401
+        return JSONResponse(
+            content={"message": "Invalid credentials"},
+            status_code=401,
         )
 
     # Check hashed password
