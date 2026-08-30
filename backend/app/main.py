@@ -158,30 +158,18 @@ async def login(login: LoginRequest, db: Session = Depends(get_db)):
 async def get_current_user(request: Request, db: Session = Depends(get_db)) -> User:
     token = request.cookies.get("access_token")
     if not token:
-        return JSONResponse(
-            content={"message": "Not authenticated"},
-            status_code=401,
-        )
+        raise HTTPException(status_code=401, detail="Not authenticated")
 
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
     except jwt.ExpiredSignatureError:
-        return JSONResponse(
-                    content={"message": "Token expired"},
-                    status_code=401,
-                )
+        raise HTTPException(status_code=401, detail="Token expired")
     except jwt.InvalidTokenError:
-        return JSONResponse(
-                    content={"message": "Invalid token"},
-                    status_code=401,
-                )
+        raise HTTPException(status_code=401, detail="Invalid token")
 
     user = db.query(User).filter(User.id == payload["user_id"]).first()
     if not user:
-        return JSONResponse(
-                    content={"message": "User not found"},
-                    status_code=401,
-                )
+        raise HTTPException(status_code=401, detail="User not found")
     return user
 
 @app.get("/me")
