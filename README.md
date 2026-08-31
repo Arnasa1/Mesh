@@ -1,5 +1,7 @@
 # Mesh
 
+![Look down here](<ChatGPT Image Aug 29, 2026, 05_49_13 PM.png>)
+
 ## ‼️ The project is curently in early development ‼️
 
 ## **Mesh** is a local-first collaborative document platform that lets users work offline and automatically sync changes across devices once they reconnect.
@@ -148,25 +150,21 @@ npm install
 
 
 
-## Repository configuration (some these changes are configurated in 'Development setup' section):
-#### git clone cd mesh Backend cd backend
+## Repisotory development quick guide:
 
-#### uv add fastapi "uvicorn[standard]" pydantic sqlalchemy alembic asyncpg redis uv add --dev pytest pytest-asyncio httpx Frontend cd ../frontend npm install Start the Infrastructure
+### Boot backend:
 
-### From the project root:
+``` bash
+ uv run uvicorn app.main:app --reload 
+```
+### The FastAPI development server will display the local URL in the terminal.
 
-#### docker compose up -d
+### Boot frontend:
 
-### Check that PostgreSQL and Redis are running:
-
-#### docker compose ps Run the Application Backend cd backend uv run uvicorn app.main:app --reload Frontend
-
-### In a separate terminal:
-
-#### cd frontend npm run dev
+``` bash 
+cd frontend npm run dev
+```
 
 ### The Vite development server will display the local URL in the terminal.
-
-#### Testing Backend cd backend uv run pytest Frontend cd frontend npm run test End-to-End Tests cd frontend npx playwright install npx playwright test
 
 
