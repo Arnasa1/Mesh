@@ -1,6 +1,6 @@
 # Mesh
 
-![Look down here](<ChatGPT Image Aug 29, 2026, 05_49_13 PM.png>)
+![Look down here](<No-AI-SLOP.png>)
 
 ## ‼️ The project is curently in early development ‼️
 
