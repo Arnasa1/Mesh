@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import "../styles/login.css"
 
 interface LoginResponse {
@@ -11,6 +11,7 @@ function Login() {
     username: '',
     password: '',
   })
+  const navigate = useNavigate();
   const [message, setMessage] = useState<string>('')
   const [messageType, setMessageType] = useState<'success' | 'error' | ''>('')
   const [loading, setLoading] = useState(false)
@@ -41,6 +42,9 @@ function Login() {
 
       setMessage(data.message || 'Logged in successfully!')
       setMessageType('success')
+      setTimeout(() => {
+        navigate("/dashboard")
+      }, 1000);
     } catch (err) {
       setMessage(err instanceof Error ? err.message : 'Something went wrong')
       setMessageType('error')
