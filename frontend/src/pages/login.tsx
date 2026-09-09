@@ -11,6 +11,8 @@ function Login() {
     username: '',
     password: '',
   })
+
+  const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate();
   const [message, setMessage] = useState<string>('')
   const [messageType, setMessageType] = useState<'success' | 'error' | ''>('')
@@ -24,7 +26,6 @@ function Login() {
     e.preventDefault()
     setLoading(true)
     setMessage('')
-
     setMessageType('')
 
     try {
@@ -33,6 +34,7 @@ function Login() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       })
+
       const data: LoginResponse = await res.json()
 
       if (!res.ok) {
@@ -42,9 +44,11 @@ function Login() {
 
       setMessage(data.message || 'Logged in successfully!')
       setMessageType('success')
+
       setTimeout(() => {
         navigate("/dashboard")
-      }, 1000);
+      }, 1000)
+
     } catch (err) {
       setMessage(err instanceof Error ? err.message : 'Something went wrong')
       setMessageType('error')
@@ -55,12 +59,17 @@ function Login() {
 
   return (
     <div className="login">
-      <section className="hero">
+      <section className="hero-forms">
         <h1 className="hero-title">Login</h1>
+
+        <p className="hero-subtitle">
+          ‎ ‎
+        </p>
 
         <form onSubmit={handleSubmit}>
           <fieldset className="form-group">
             <label htmlFor="username">Username/Email</label>
+
             <input
               type="text"
               id="username"
@@ -73,19 +82,37 @@ function Login() {
 
           <fieldset className="form-group">
             <label htmlFor="password">Password</label>
+
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
               required
             />
+
+            <label>
+              <input
+                type="checkbox"
+                checked={showPassword}
+                onChange={(e) => setShowPassword(e.target.checked)}
+              />
+              Show password
+            </label>
           </fieldset>
 
-          {message && (<p className={`form-message ${messageType}`}>{message}</p>)}
+          {message && (
+            <p className={`form-message ${messageType}`}>
+              {message}
+            </p>
+          )}
 
-          <button type="submit" className="btn btn-primary" disabled={loading}>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={loading}
+          >
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>

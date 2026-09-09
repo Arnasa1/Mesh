@@ -1,18 +1,21 @@
 .login {
   min-height: 100vh;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  background: #0f0f12;
-  color: #f5f5f7;
+  
+  background: #fff;
+  color: #000;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
-.hero {
+.hero-forms {
   max-width: 480px;
   width: 100%;
   text-align: center;
   padding: 2rem;
+  border-radius: 10px;
+  background: #D4D4D4;
 }
 
 .hero-title {
@@ -20,11 +23,12 @@
   font-weight: 700;
   letter-spacing: -0.03em;
   margin-bottom: 0.5rem;
+  color: #111111;
 }
 
 .hero-subtitle {
   font-size: 1.15rem;
-  color: #a1a1aa;
+  color: darkslategrey;
   margin-bottom: 2rem;
 }
 
@@ -58,11 +62,11 @@ form {
 .form-group label {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #d4d4d8;
+  color: black
 }
 
 .form-group input {
-  background: #18181b;
+  background: #18181B;
   border: 1px solid #3f3f46;
   border-radius: 8px;
   padding: 0.75rem 1rem;
@@ -76,10 +80,11 @@ form {
   outline: none;
   border-color: #6366f1;
   background: #1f1f23;
+  color: #FFFFFF;
 }
 
 .form-group input::placeholder {
-  color: #71717a;
+  color: #FFFFFF;
 }
 
 .btn {
@@ -114,7 +119,7 @@ form {
 
 .form-message.success {
   font-size: 0.9rem;
-  color: #97f871;
+  color: green;
   background: rgba(158, 248, 113, 0.1);
   border: 1px solid rgba(113, 248, 113, 0.3);
   border-radius: 8px;
@@ -124,7 +129,7 @@ form {
 
 .form-message.error {
   font-size: 0.9rem;
-  color: #f87171;
+  color: red;
   background: rgba(248, 113, 113, 0.1);
   border: 1px solid rgba(248, 113, 113, 0.3);
   border-radius: 8px;

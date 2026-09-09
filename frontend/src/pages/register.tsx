@@ -12,7 +12,9 @@ function Register() {
     email: '',
     password: '',
   })
-  const navigate = useNavigate();
+
+  const [showPassword, setShowPassword] = useState(false)
+  const navigate = useNavigate()
   const [message, setMessage] = useState<string>('')
   const [messageType, setMessageType] = useState<'success' | 'error' | ''>('')
   const [loading, setLoading] = useState(false)
@@ -25,7 +27,6 @@ function Register() {
     e.preventDefault()
     setLoading(true)
     setMessage('')
-
     setMessageType('')
 
     try {
@@ -34,18 +35,19 @@ function Register() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       })
+
       const data: RegisterResponse = await res.json()
 
       if (!res.ok) {
-        setMessageType('error')
         throw new Error(data.message || 'Registration failed')
       }
 
       setMessage(data.message || 'Registered successfully!')
       setMessageType('success')
+
       setTimeout(() => {
         navigate("/login")
-      }, 1000);
+      }, 1000)
 
     } catch (err) {
       setMessage(err instanceof Error ? err.message : 'Something went wrong')
@@ -57,8 +59,9 @@ function Register() {
 
   return (
     <div className="register">
-      <section className="hero">
+      <section className="hero-forms">
         <h1 className="hero-title">Register</h1>
+
         <p className="hero-subtitle">
           Create an account to start using Mesh.
         </p>
@@ -66,6 +69,7 @@ function Register() {
         <form onSubmit={handleSubmit}>
           <fieldset className="form-group">
             <label htmlFor="username">Username</label>
+
             <input
               type="text"
               id="username"
@@ -78,6 +82,7 @@ function Register() {
 
           <fieldset className="form-group">
             <label htmlFor="email">Email</label>
+
             <input
               type="email"
               id="email"
@@ -90,19 +95,37 @@ function Register() {
 
           <fieldset className="form-group">
             <label htmlFor="password">Password</label>
+
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
               required
             />
+
+            <label>
+              <input
+                type="checkbox"
+                checked={showPassword}
+                onChange={(e) => setShowPassword(e.target.checked)}
+              />
+              Show password
+            </label>
           </fieldset>
 
-          {message && (<p className={`form-message ${messageType}`}>{message}</p>)}
+          {message && (
+            <p className={`form-message ${messageType}`}>
+              {message}
+            </p>
+          )}
 
-          <button type="submit" className="btn btn-primary" disabled={loading}>
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={loading}
+          >
             {loading ? 'Registering...' : 'Register'}
           </button>
         </form>
