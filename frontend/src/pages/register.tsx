@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { SunIcon, MoonIcon } from '@heroicons/react/24/outline'
 import "../styles/register.css"
 
 interface RegisterResponse {
@@ -14,13 +15,17 @@ function Register() {
   })
 
   const [showPassword, setShowPassword] = useState(false)
-  const navigate = useNavigate()
   const [message, setMessage] = useState<string>('')
   const [messageType, setMessageType] = useState<'success' | 'error' | ''>('')
   const [loading, setLoading] = useState(false)
+  const [darkMode, setDarkMode] = useState(false)
+  const navigate = useNavigate()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    })
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -32,7 +37,9 @@ function Register() {
     try {
       const res = await fetch('/register', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(formData),
       })
 
@@ -45,21 +52,35 @@ function Register() {
       setMessage(data.message || 'Registered successfully!')
       setMessageType('success')
 
-      setTimeout(() => {
-        navigate("/login")
-      }, 1000)
-
-    } catch (err) {
-      setMessage(err instanceof Error ? err.message : 'Something went wrong')
+      setTimeout(() => {navigate('/login')}, 1000)} catch (err) {
+      setMessage(
+        err instanceof Error ? err.message : 'Something went wrong')
       setMessageType('error')
     } finally {
       setLoading(false)
     }
   }
 
+  const toggleDarkMode = () => {
+    setDarkMode((prev) => !prev)
+  }
+
   return (
-    <div className="register">
+    <div className={`register ${darkMode ? 'dark' : ''}`}>
       <section className="hero-forms">
+        <button
+          type="button"
+          className="theme-toggle"
+          onClick={toggleDarkMode}
+          aria-label="Toggle dark mode"
+        >
+          {darkMode ? (
+            <SunIcon className="mode-icon" />
+          ) : (
+            <MoonIcon className="mode-icon" />
+          )}
+        </button>
+
         <h1 className="hero-title">Register</h1>
 
         <p className="hero-subtitle">
@@ -97,7 +118,7 @@ function Register() {
             <label htmlFor="password">Password</label>
 
             <input
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
               id="password"
               name="password"
               value={formData.password}
@@ -105,7 +126,7 @@ function Register() {
               required
             />
 
-            <label>
+            <label className="password-toggle">
               <input
                 type="checkbox"
                 checked={showPassword}
@@ -130,8 +151,9 @@ function Register() {
           </button>
         </form>
 
-        <p className="hero-subtitle">
-          Already have an account? <Link to="/login">Log in</Link>
+        <p className="hero-subtitle login-link">
+          Already have an account?{' '}
+          <Link to="/login">Log in</Link>
         </p>
       </section>
     </div>

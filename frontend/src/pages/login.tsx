@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { SunIcon, MoonIcon } from '@heroicons/react/24/outline'
 import "../styles/login.css"
 
 interface LoginResponse {
@@ -13,13 +14,18 @@ function Login() {
   })
 
   const [showPassword, setShowPassword] = useState(false)
-  const navigate = useNavigate();
   const [message, setMessage] = useState<string>('')
   const [messageType, setMessageType] = useState<'success' | 'error' | ''>('')
   const [loading, setLoading] = useState(false)
+  const [darkMode, setDarkMode] = useState(false)
+
+  const navigate = useNavigate()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    })
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -31,14 +37,15 @@ function Login() {
     try {
       const res = await fetch('/login', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(formData),
       })
 
       const data: LoginResponse = await res.json()
 
       if (!res.ok) {
-        setMessageType('error')
         throw new Error(data.message || 'Login failed')
       }
 
@@ -46,24 +53,44 @@ function Login() {
       setMessageType('success')
 
       setTimeout(() => {
-        navigate("/dashboard")
+        navigate('/dashboard')
       }, 1000)
 
     } catch (err) {
-      setMessage(err instanceof Error ? err.message : 'Something went wrong')
+      setMessage(
+        err instanceof Error ? err.message : 'Something went wrong'
+      )
       setMessageType('error')
     } finally {
       setLoading(false)
     }
   }
 
+  const toggleDarkMode = () => {
+    setDarkMode((prev) => !prev)
+  }
+
   return (
-    <div className="login">
+    <div className={`login ${darkMode ? 'dark' : ''}`}>
       <section className="hero-forms">
+
+        <button
+          type="button"
+          className="theme-toggle"
+          onClick={toggleDarkMode}
+          aria-label="Toggle dark mode"
+        >
+          {darkMode ? (
+            <SunIcon className="mode-icon" />
+          ) : (
+            <MoonIcon className="mode-icon" />
+          )}
+        </button>
+
         <h1 className="hero-title">Login</h1>
 
-        <p className="hero-subtitle">
-          ‎ ‎
+        <p className="hero-subtitle login-description">
+          Log in to continue using Mesh.
         </p>
 
         <form onSubmit={handleSubmit}>
@@ -84,7 +111,7 @@ function Login() {
             <label htmlFor="password">Password</label>
 
             <input
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
               id="password"
               name="password"
               value={formData.password}
@@ -92,7 +119,7 @@ function Login() {
               required
             />
 
-            <label>
+            <label className="password-toggle">
               <input
                 type="checkbox"
                 checked={showPassword}
@@ -117,8 +144,9 @@ function Login() {
           </button>
         </form>
 
-        <p className="hero-subtitle">
-          Don't have an account? <Link to="/register">Sign up</Link>
+        <p className="hero-subtitle login-link">
+          Don't have an account?{' '}
+          <Link to="/register">Sign up</Link>
         </p>
       </section>
     </div>

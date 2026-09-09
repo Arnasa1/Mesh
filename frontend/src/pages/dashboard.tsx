@@ -1,11 +1,33 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import '../styles/dashboard.css'
+import { SunIcon, MoonIcon } from '@heroicons/react/24/outline'
+import "../styles/dashboard.css"
 
 function Dashboard() {
+    const [darkMode, setDarkMode] = useState(false)
+
+    const toggleDarkMode = () => {
+        setDarkMode((prev) => !prev)
+    }
+
     return (
-        <div id="dashboard">
+        <div id="dashboard" className={darkMode ? 'dark' : ''}>
+
             <section className="hero-dashboard">
                 <h1>Mesh</h1>
+
+                <button
+                    type="button"
+                    className="theme-toggle"
+                    onClick={toggleDarkMode}
+                    aria-label="Toggle dark mode"
+                >
+                    {darkMode ? (
+                        <SunIcon className="mode-icon" />
+                    ) : (
+                        <MoonIcon className="mode-icon" />
+                    )}
+                </button>
             </section>
 
             <section className="sidebar">
@@ -29,6 +51,7 @@ function Dashboard() {
                     About
                 </Link>
             </section>
+
         </div>
     )
 }

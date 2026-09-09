@@ -1,3 +1,10 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 .register {
   min-height: 100vh;
   display: flex;
@@ -6,6 +13,7 @@
   background: #fff;
   color: #000;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .hero-forms {
@@ -14,7 +22,8 @@
   text-align: center;
   padding: 2rem;
   border-radius: 10px;
-  background: #D4D4D4;
+  background: #d4d4d4;
+  transition: background-color 0.3s ease;
 }
 
 .hero-title {
@@ -23,12 +32,14 @@
   letter-spacing: -0.03em;
   margin-bottom: 0.5rem;
   color: #111111;
+  transition: color 0.3s ease;
 }
 
 .hero-subtitle {
   font-size: 1.15rem;
   color: #4b5563;
   margin-bottom: 2rem;
+  transition: color 0.3s ease;
 }
 
 .hero-subtitle a {
@@ -62,10 +73,13 @@ form {
   font-size: 0.9rem;
   font-weight: 600;
   color: #111111;
+  transition: color 0.3s ease;
 }
 
-.form-group input {
-  background: #18181B;
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
+  background: #18181b;
   border: 1px solid #3f3f46;
   border-radius: 8px;
   padding: 0.75rem 1rem;
@@ -75,7 +89,9 @@ form {
   transition: border-color 0.15s ease, background 0.15s ease;
 }
 
-.form-group input:focus {
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus {
   outline: none;
   border-color: #6366f1;
   background: #1f1f23;
@@ -84,6 +100,23 @@ form {
 
 .form-group input::placeholder {
   color: #a1a1aa;
+}
+
+.password-toggle {
+  display: flex;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem !important;
+  font-weight: 400 !important;
+  color: #4b5563 !important;
+  cursor: pointer;
+}
+
+.password-toggle input {
+  width: auto;
+  margin: 0;
+  cursor: pointer;
 }
 
 .btn {
@@ -134,4 +167,98 @@ form {
   border-radius: 8px;
   padding: 0.6rem 1rem;
   margin: 0;
+}
+
+.login-link {
+  margin-top: 2rem;
+  margin-bottom: 0;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  margin-bottom: 1rem;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 10px;
+  background: #eeeeee;
+  color: #111111;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.15s ease;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+}
+
+.mode-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.register.dark {
+  background: #111827;
+  color: #f9fafb;
+}
+
+.register.dark .hero-forms {
+  background: #1f2937;
+}
+
+.register.dark .hero-title {
+  color: #f9fafb;
+}
+
+.register.dark .hero-subtitle {
+  color: #d1d5db;
+}
+
+.register.dark .form-group label {
+  color: #f9fafb;
+}
+
+.register.dark .theme-toggle {
+  background: #374151;
+  color: #f9fafb;
+}
+
+.register.dark .hero-subtitle a {
+  color: #818cf8;
+}
+
+.register.dark .hero-subtitle a:hover {
+  color: #a5b4fc;
+}
+
+.register.dark .password-toggle {
+  color: #d1d5db !important;
+}
+
+.register.dark .form-group input[type="text"],
+.register.dark .form-group input[type="email"],
+.register.dark .form-group input[type="password"] {
+  background: #18181b;
+  border-color: #3f3f46;
+  color: #f5f5f7;
+}
+
+.register.dark .form-group input[type="text"]:focus,
+.register.dark .form-group input[type="email"]:focus,
+.register.dark .form-group input[type="password"]:focus {
+  background: #1f1f23;
+  border-color: #6366f1;
+}
+
+.register.dark .form-message.success {
+  color: #4ade80;
+}
+
+.register.dark .form-message.error {
+  color: #f87171;
 }

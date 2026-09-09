@@ -1,21 +1,48 @@
-.dashboard {
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#dashboard {
   min-height: 100vh;
   display: flex;
   align-items: flex-start;
-  justify-content: start;
-  background: #0f0f12;
-  color: #f5f5f7;
+  justify-content: flex-start;
+  background: #ffffff;
+  color: #111111;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .hero-dashboard {
-  width: auto;
-  position: sticky;
-  top:0;
-  margin: 0;
-  padding: 0.5rem;
-  text-align: left;
+  width: calc(100% - 200px);
+  height: 64px;
+
+  position: fixed;
+  top: 0;
+  left: 200px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0.5rem 1.5rem;
+  box-sizing: border-box;
   background: #f1f1f1;
+  color: #111111;
+
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.hero-dashboard h1 {
+  margin: 0;
+  font-size: 1.5rem;
 }
 
 .sidebar {
@@ -24,30 +51,107 @@
   width: 200px;
   background-color: #f1f1f1;
   position: fixed;
+  left: 0;
+  top: 0;
   height: 100%;
   overflow: auto;
+
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .sidebar a {
   display: block;
-  color: black;
+  color: #111111;
   padding: 16px;
   text-decoration: none;
   text-align: left;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
- 
+
 .sidebar a.active {
   background-color: #6366f1;
-  color: white;
+  color: #ffffff;
 }
 
 .sidebar a:hover:not(.active) {
-  background-color: #555;
-  color: white;
+  background-color: #555555;
+  color: #ffffff;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 42px;
+  height: 42px;
+
+  
+  border: none;
+  border-radius: 10px;
+
+  background: #eeeeee;
+  color: #111111;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.15s ease;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+}
+
+.mode-icon {
+  width: 24px;
+  height: 24px;
 }
 
 div.content {
   margin-left: 200px;
-  padding: 1px 16px;
+  padding: 80px 16px 16px;
   height: 1000px;
+  box-sizing: border-box;
 }
+
+#dashboard.dark {
+  background: #111827;
+  color: #f9fafb;
+}
+
+#dashboard.dark .hero-dashboard {
+  background: #1f2937;
+  color: #f9fafb;
+}
+
+#dashboard.dark .sidebar {
+  background-color: #1f2937;
+}
+
+#dashboard.dark .sidebar a {
+  color: #f9fafb;
+}
+
+#dashboard.dark .sidebar a.active {
+  background-color: #6366f1;
+  color: #ffffff;
+}
+
+#dashboard.dark .sidebar a:hover:not(.active) {
+  background-color: #374151;
+  color: #ffffff;
+}
+
+#dashboard.dark .theme-toggle {
+  background: #374151;
+  color: #f9fafb;
+}
+
