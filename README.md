@@ -1,7 +1,5 @@
 # Mesh
 
-![Look down here](<No-AI-SLOP.png>)
-
 ## ‼️ The project is curently in early development ‼️
 
 ## **Mesh** is a local-first collaborative document platform that lets users work offline and automatically sync changes across devices once they reconnect.
