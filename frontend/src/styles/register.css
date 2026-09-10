@@ -1,18 +1,29 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 .register {
   min-height: 100vh;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  background: #0f0f12;
-  color: #f5f5f7;
+  background: #fff;
+  color: #000;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.hero {
+.hero-forms {
   max-width: 480px;
   width: 100%;
   text-align: center;
   padding: 2rem;
+  border-radius: 10px;
+  background: #d4d4d4;
+  transition: background-color 0.3s ease;
 }
 
 .hero-title {
@@ -20,22 +31,25 @@
   font-weight: 700;
   letter-spacing: -0.03em;
   margin-bottom: 0.5rem;
+  color: #111111;
+  transition: color 0.3s ease;
 }
 
 .hero-subtitle {
   font-size: 1.15rem;
-  color: #a1a1aa;
+  color: #4b5563;
   margin-bottom: 2rem;
+  transition: color 0.3s ease;
 }
 
 .hero-subtitle a {
-  color: #818cf8;
+  color: #6366f1;
   text-decoration: none;
   font-weight: 500;
 }
 
 .hero-subtitle a:hover {
-  color: #a5b4fc;
+  color: #4f46e5;
   text-decoration: underline;
 }
 
@@ -58,10 +72,13 @@ form {
 .form-group label {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #d4d4d8;
+  color: #111111;
+  transition: color 0.3s ease;
 }
 
-.form-group input {
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
   background: #18181b;
   border: 1px solid #3f3f46;
   border-radius: 8px;
@@ -72,14 +89,34 @@ form {
   transition: border-color 0.15s ease, background 0.15s ease;
 }
 
-.form-group input:focus {
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="password"]:focus {
   outline: none;
   border-color: #6366f1;
   background: #1f1f23;
+  color: #fff;
 }
 
 .form-group input::placeholder {
-  color: #71717a;
+  color: #a1a1aa;
+}
+
+.password-toggle {
+  display: flex;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem !important;
+  font-weight: 400 !important;
+  color: #4b5563 !important;
+  cursor: pointer;
+}
+
+.password-toggle input {
+  width: auto;
+  margin: 0;
+  cursor: pointer;
 }
 
 .btn {
@@ -105,7 +142,7 @@ form {
 
 .btn-primary {
   background: #6366f1;
-  color: white;
+  color: #fff;
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -114,9 +151,9 @@ form {
 
 .form-message.success {
   font-size: 0.9rem;
-  color: #97f871;
-  background: rgba(158, 248, 113, 0.1);
-  border: 1px solid rgba(113, 248, 113, 0.3);
+  color: green;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
   border-radius: 8px;
   padding: 0.6rem 1rem;
   margin: 0;
@@ -124,10 +161,104 @@ form {
 
 .form-message.error {
   font-size: 0.9rem;
-  color: #f87171;
+  color: red;
   background: rgba(248, 113, 113, 0.1);
   border: 1px solid rgba(248, 113, 113, 0.3);
   border-radius: 8px;
   padding: 0.6rem 1rem;
   margin: 0;
+}
+
+.login-link {
+  margin-top: 2rem;
+  margin-bottom: 0;
+}
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  margin-bottom: 1rem;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 10px;
+  background: #eeeeee;
+  color: #111111;
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.15s ease;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+}
+
+.mode-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.register.dark {
+  background: #111827;
+  color: #f9fafb;
+}
+
+.register.dark .hero-forms {
+  background: #1f2937;
+}
+
+.register.dark .hero-title {
+  color: #f9fafb;
+}
+
+.register.dark .hero-subtitle {
+  color: #d1d5db;
+}
+
+.register.dark .form-group label {
+  color: #f9fafb;
+}
+
+.register.dark .theme-toggle {
+  background: #374151;
+  color: #f9fafb;
+}
+
+.register.dark .hero-subtitle a {
+  color: #818cf8;
+}
+
+.register.dark .hero-subtitle a:hover {
+  color: #a5b4fc;
+}
+
+.register.dark .password-toggle {
+  color: #d1d5db !important;
+}
+
+.register.dark .form-group input[type="text"],
+.register.dark .form-group input[type="email"],
+.register.dark .form-group input[type="password"] {
+  background: #18181b;
+  border-color: #3f3f46;
+  color: #f5f5f7;
+}
+
+.register.dark .form-group input[type="text"]:focus,
+.register.dark .form-group input[type="email"]:focus,
+.register.dark .form-group input[type="password"]:focus {
+  background: #1f1f23;
+  border-color: #6366f1;
+}
+
+.register.dark .form-message.success {
+  color: #4ade80;
+}
+
+.register.dark .form-message.error {
+  color: #f87171;
 }

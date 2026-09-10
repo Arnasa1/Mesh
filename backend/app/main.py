@@ -172,6 +172,8 @@ async def get_current_user(request: Request, db: Session = Depends(get_db)) -> U
         raise HTTPException(status_code=401, detail="User not found")
     return user
 
+    # Reikia sutvarkyti, kad pakurtoje login sesijoje useris negaletu jos resetinti per login page
+
 @app.get("/me")
 async def read_current_user(user: User = Depends(get_current_user)):
     return {
