@@ -1,8 +1,9 @@
+/* ---------- Dashboard ---------- */
+
 .dashboard {
   min-height: 100vh;
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
+  flex-direction: column;
   background: var(--color-background);
   color: var(--color-text);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -15,11 +16,11 @@
 /* ---------- Dashboard Header ---------- */
 
 .hero-dashboard {
-  width: calc(100% - 200px);
+  width: auto;
   height: 55.5px;
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 200px;
+  right: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -27,6 +28,8 @@
   background: var(--color-surface);
   color: var(--color-text);
   border-bottom: 1px solid var(--color-border);
+  z-index: 10;
+
   transition:
     background-color var(--transition-normal),
     color var(--transition-normal),
@@ -39,7 +42,6 @@
   color: var(--color-text);
 }
 
-
 /* ---------- Sidebar ---------- */
 
 .sidebar {
@@ -49,10 +51,11 @@
   background-color: var(--color-surface);
   color: var(--color-text);
   position: fixed;
-  left: 0;
-  top: 0;
+  left: -30px;
+  top: 45px;
   height: 100%;
   overflow: auto;
+  font-size: 0.5rem;
   border-right: 1px solid var(--color-border);
   transition:
     background-color var(--transition-normal),
@@ -60,10 +63,14 @@
     border-color var(--transition-normal);
 }
 
+.sidebar li {
+  display: block;
+}
+
 .sidebar a {
   display: block;
   color: var(--color-text);
-  padding: 16px;
+  padding: 6px;
   text-decoration: none;
   text-align: left;
 
@@ -82,19 +89,48 @@
   color: var(--color-text);
 }
 
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-/* ---------- Dashboard ---------- */
+svg {
+  display: inline;
+  vertical-align: middle;
+  fill: var(--color-text);
+}
 
-div.content {
+/* ---------- Dashboard Body ---------- */
+
+.dashboard-body {
   margin-left: 200px;
-  padding: 80px 16px 16px;
+  padding-top: 55.5px;
   min-height: 100vh;
-  box-sizing: border-box;
+}
+
+
+/* ---------- Dashboard Content ---------- */
+
+.dashboard-content {
+  min-height: calc(100vh - 55.5px);
+  padding: 30px;
   background-color: var(--color-background);
   color: var(--color-text);
+
   transition:
     background-color var(--transition-normal),
     color var(--transition-normal);
+}
+
+.dashboard .menu-button,
+.dashboard .menu-button:hover,
+.dashboard .menu-button:focus,
+.dashboard .menu-button:active {
+  background: transparent;
+  border: none;
+  outline: none;
+  box-shadow: none;
 }
 
 /* ---------- Dashboard Theme Switch ---------- */
@@ -107,3 +143,5 @@ div.content {
   background: none;
   position: sticky;
 }
+
+/* ---------- Dashboard Sidebar ---------- */

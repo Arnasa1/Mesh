@@ -20,9 +20,6 @@ body {
     color var(--transition-normal);
 }
 
-
-/* ---------- Theme Variables ---------- */
-
 :root {
   /* ---------- Page ---------- */
 
@@ -279,7 +276,6 @@ body {
   display: block;
 }
 
-
 /* ---------- Forms ---------- */
 
 form {
@@ -397,18 +393,6 @@ form {
     color var(--transition-normal),
     border-color var(--transition-normal);
 }
-
-/* ---------- Shared Links ---------- */
-
-a {
-  color: var(--color-primary);
-  transition: color var(--transition-fast);
-}
-
-a:hover {
-  color: var(--color-primary-hover);
-}
-
 
 /* ---------- Utility ----------  */
 

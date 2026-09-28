@@ -1,10 +1,15 @@
 import { StrictMode, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+
 import Home from './pages/home'
 import Register from './pages/register'
 import Login from './pages/login'
 import Dashboard from './pages/dashboard'
+import DashboardItems from './scripts/DashboardItems'
+import NotFoundPage from './pages/NotFoundPage'
+import About from './pages/dashboardAbout'
+
 import { initializeTheme } from './scripts/themes'
 
 function Theme() {
@@ -12,20 +17,21 @@ function Theme() {
     initializeTheme()
   }, [])
 
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-      </Routes>
-    </BrowserRouter>
-  )
+  return null
 }
+
+const router = createBrowserRouter([
+  { path: '/', element: <Home /> },
+  { path: '/register', element: <Register /> },
+  { path: '/login', element: <Login /> },
+  { path: '/dashboard', element: <Dashboard /> },
+  { path: '/dashboard#About', element: <About /> },
+  { path: '*', element: <NotFoundPage /> },
+])
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <Theme />
+    <RouterProvider router={router} />
   </StrictMode>
 )
